@@ -10,6 +10,8 @@ RESULT_FILES = {
     "weighted": Path("centrality_weighted_results.txt"),
 }
 
+ALGO_COMPARISON_FILE = Path("../centrality_unweighted_dijistra_.txt")
+
 NETWORKX_FILES = {
     "unweighted": Path("networkx_time.txt"),
     "weighted": Path("networkx_weighted_time.txt"),
@@ -25,6 +27,9 @@ OUTPUTS = {
         "time": Path("plots/weighted_time_vs_threads.png"),
         "speedup": Path("plots/weighted_speedup.png"),
         "comparison": Path("plots/weighted_cpp_vs_networkx.png"),
+    },
+    "algorithm": {
+        "comparison": Path("plots/unweighted_bfs_vs_dijkstra.png"),
     },
 }
 
@@ -125,6 +130,22 @@ def plot_library_comparison(cpp_time, nx_time, title, output_path: Path):
     plt.close()
 
 
+def plot_algorithm_comparison(threads, bfs_times, dijkstra_times, title, output_path: Path):
+    plt.figure(figsize=(7, 4.5))
+    plt.plot(threads, bfs_times, marker="o", linewidth=2, label="BFS (Unweighted)")
+    plt.plot(threads, dijkstra_times, marker="o", linewidth=2, label="Dijkstra (Unweighted)")
+    plt.title(title)
+    plt.xlabel("Number of Threads")
+    plt.ylabel("Execution Time (seconds)")
+    plt.xticks(threads)
+    plt.grid(True, linestyle="--", alpha=0.6)
+    plt.legend()
+    plt.tight_layout()
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    plt.savefig(output_path, dpi=200)
+    plt.close()
+
+
 def main():
     for label, path in RESULT_FILES.items():
         threads, times = parse_results(path)
@@ -150,6 +171,19 @@ def main():
             f"Library Comparison ({label.capitalize()})",
             OUTPUTS[label]["comparison"],
         )
+
+    unweighted_threads, bfs_times = parse_results(RESULT_FILES["unweighted"])
+    dijkstra_threads, dijkstra_times = parse_results(ALGO_COMPARISON_FILE)
+    if unweighted_threads != dijkstra_threads:
+        raise ValueError("Thread counts do not match for BFS and Dijkstra results")
+
+    plot_algorithm_comparison(
+        unweighted_threads,
+        bfs_times,
+        dijkstra_times,
+        "Algorithm Efficiency (Unweighted Dataset)",
+        OUTPUTS["algorithm"]["comparison"],
+    )
 
     print("Plots saved to the plots/ directory.")
 
