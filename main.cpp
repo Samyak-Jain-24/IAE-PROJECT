@@ -45,7 +45,7 @@ int main(int argc, char* argv[]) {
     std::chrono::duration<double> elapsed = end - start;
 
     std::cout << "Computation took: " << elapsed.count() << " seconds." << std::endl;
-    std::cout << "Top node (0) score: " << closeness[0] << std::endl;
+    std::cout << "Top node (0) score: " << closeness[60] << std::endl;
 
     return 0;
 }
