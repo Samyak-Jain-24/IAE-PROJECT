@@ -18,8 +18,8 @@ public:
     Graph(int vertices, bool weighted);
     void addEdge(int u, int v, int w = 1);
     
-    // Calculates the sum of shortest paths from a start node
-    double getShortestPathSum(int startNode);
+    // Calculates the sum of shortest paths and reachable node count from a start node
+    double getShortestPathSum(int startNode, int& reachableNodes);
 };
 
 #endif

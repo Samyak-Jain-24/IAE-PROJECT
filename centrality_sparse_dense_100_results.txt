@@ -1,0 +1,33 @@
+Sparse (V=100,E=300)
+1 Thread:
+Computation took: 0.000166967 seconds.
+Top node (0) score: 0.273481
+
+2 Threads:
+Computation took: 0.000139565 seconds.
+Top node (0) score: 0.273481
+
+4 Threads:
+Computation took: 0.000208742 seconds.
+Top node (0) score: 0.273481
+
+8 Threads:
+Computation took: 0.00910952 seconds.
+Top node (0) score: 0.273481
+
+Dense (V=100,E=8000)
+1 Thread:
+Computation took: 0.00057619 seconds.
+Top node (0) score: 0.702128
+
+2 Threads:
+Computation took: 0.000503281 seconds.
+Top node (0) score: 0.702128
+
+4 Threads:
+Computation took: 0.000385716 seconds.
+Top node (0) score: 0.702128
+
+8 Threads:
+Computation took: 0.00344533 seconds.
+Top node (0) score: 0.702128

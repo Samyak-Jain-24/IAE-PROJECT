@@ -33,9 +33,11 @@ int main(int argc, char* argv[]) {
     // PARALLEL BLOCK
     #pragma omp parallel for schedule(dynamic)
     for (int i = 0; i < V; i++) {
-        double pathSum = g.getShortestPathSum(i);
-        if (pathSum > 0) {
-            closeness[i] = (double)(V - 1) / pathSum;
+        int reachableNodes = 0;
+        double pathSum = g.getShortestPathSum(i, reachableNodes);
+        if (pathSum > 0 && reachableNodes > 0) {
+            // NetworkX (Wasserman-Faust) formula for disconnected graphs.
+            closeness[i] = (double)(reachableNodes * reachableNodes) / ((double)(V - 1) * pathSum);
         } else {
             closeness[i] = 0;
         }
@@ -45,7 +47,7 @@ int main(int argc, char* argv[]) {
     std::chrono::duration<double> elapsed = end - start;
 
     std::cout << "Computation took: " << elapsed.count() << " seconds." << std::endl;
-    std::cout << "Top node (0) score: " << closeness[60] << std::endl;
+    std::cout << "Top node (0) score: " << closeness[0] << std::endl;
 
     return 0;
 }

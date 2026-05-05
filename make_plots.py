@@ -10,7 +10,7 @@ RESULT_FILES = {
     "weighted": Path("centrality_weighted_results.txt"),
 }
 
-ALGO_COMPARISON_FILE = Path("../centrality_unweighted_dijistra_.txt")
+ALGO_COMPARISON_FILE = Path("centrality_unweighted_dijkstra_wikivote_results.txt")
 
 NETWORKX_FILES = {
     "unweighted": Path("networkx_time.txt"),
@@ -30,6 +30,12 @@ OUTPUTS = {
     },
     "algorithm": {
         "comparison": Path("plots/unweighted_bfs_vs_dijkstra.png"),
+    },
+    "sparse_dense_100": {
+        "comparison": Path("plots/sparse_dense_100_time_vs_threads.png"),
+    },
+    "sparse_dense_big": {
+        "comparison": Path("plots/sparse_dense_big_time_vs_threads.png"),
     },
 }
 
@@ -146,6 +152,62 @@ def plot_algorithm_comparison(threads, bfs_times, dijkstra_times, title, output_
     plt.close()
 
 
+def parse_sparse_dense_results(path: Path):
+    sections = {}
+    current_section = None
+    for raw in path.read_text(encoding="utf-8").splitlines():
+        line = raw.strip()
+        if not line:
+            continue
+        if line.lower().startswith("sparse"):
+            current_section = "sparse"
+            sections[current_section] = []
+            continue
+        if line.lower().startswith("dense"):
+            current_section = "dense"
+            sections[current_section] = []
+            continue
+        match_thread = THREAD_RE.search(line)
+        if match_thread:
+            sections[current_section].append(int(match_thread.group(1)))
+            continue
+        match_time = TIME_RE.search(line)
+        if match_time and current_section is not None:
+            sections[current_section].append(float(match_time.group(1)))
+
+    def split_pairs(values):
+        if len(values) % 2 != 0:
+            raise ValueError(f"Unexpected sparse/dense format in {path}")
+        threads = values[0::2]
+        times = values[1::2]
+        combined = sorted(zip(threads, times), key=lambda item: item[0])
+        threads_sorted, times_sorted = zip(*combined)
+        return list(threads_sorted), list(times_sorted)
+
+    if "sparse" not in sections or "dense" not in sections:
+        raise ValueError(f"Missing sparse/dense sections in {path}")
+
+    sparse_threads, sparse_times = split_pairs(sections["sparse"])
+    dense_threads, dense_times = split_pairs(sections["dense"])
+    return sparse_threads, sparse_times, dense_threads, dense_times
+
+
+def plot_sparse_dense_comparison(threads, sparse_times, dense_times, title, output_path: Path):
+    plt.figure(figsize=(7, 4.5))
+    plt.plot(threads, sparse_times, marker="o", linewidth=2, label="Sparse")
+    plt.plot(threads, dense_times, marker="o", linewidth=2, label="Dense")
+    plt.title(title)
+    plt.xlabel("Number of Threads")
+    plt.ylabel("Execution Time (seconds)")
+    plt.xticks(threads)
+    plt.grid(True, linestyle="--", alpha=0.6)
+    plt.legend()
+    plt.tight_layout()
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    plt.savefig(output_path, dpi=200)
+    plt.close()
+
+
 def main():
     for label, path in RESULT_FILES.items():
         threads, times = parse_results(path)
@@ -183,6 +245,34 @@ def main():
         dijkstra_times,
         "Algorithm Efficiency (Unweighted Dataset)",
         OUTPUTS["algorithm"]["comparison"],
+    )
+
+    sparse_100_path = Path("centrality_sparse_dense_100_results.txt")
+    sparse_threads, sparse_times, dense_threads, dense_times = parse_sparse_dense_results(
+        sparse_100_path
+    )
+    if sparse_threads != dense_threads:
+        raise ValueError("Thread counts do not match for sparse/dense (100)")
+    plot_sparse_dense_comparison(
+        sparse_threads,
+        sparse_times,
+        dense_times,
+        "Sparse vs Dense (V=100)",
+        OUTPUTS["sparse_dense_100"]["comparison"],
+    )
+
+    sparse_big_path = Path("centrality_sparse_dense_big_results.txt")
+    sparse_threads, sparse_times, dense_threads, dense_times = parse_sparse_dense_results(
+        sparse_big_path
+    )
+    if sparse_threads != dense_threads:
+        raise ValueError("Thread counts do not match for sparse/dense (big)")
+    plot_sparse_dense_comparison(
+        sparse_threads,
+        sparse_times,
+        dense_times,
+        "Sparse vs Dense (Big)",
+        OUTPUTS["sparse_dense_big"]["comparison"],
     )
 
     print("Plots saved to the plots/ directory.")

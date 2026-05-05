@@ -1,0 +1,33 @@
+Sparse Big (V=50000,E=200000)
+1 Thread:
+Computation took: 66.3258 seconds.
+Top node (0) score: 0.12496
+
+2 Threads:
+Computation took: 41.5474 seconds.
+Top node (0) score: 0.12496
+
+4 Threads:
+Computation took: 26.2773 seconds.
+Top node (0) score: 0.12496
+
+8 Threads:
+Computation took: 20.653 seconds.
+Top node (0) score: 0.12496
+
+Dense Big (V=15000,E=20000000)
+1 Thread:
+Computation took: 269.001 seconds.
+Top node (0) score: 0.522068
+
+2 Threads:
+Computation took: 154.943 seconds.
+Top node (0) score: 0.522068
+
+4 Threads:
+Computation took: 94.3183 seconds.
+Top node (0) score: 0.522068
+
+8 Threads:
+Computation took: 77.5664 seconds.
+Top node (0) score: 0.522068
