@@ -92,6 +92,8 @@ Outputs are saved in the plots/ directory.
 ## Notes
 - The unweighted implementation uses BFS; the weighted implementation uses Dijkstra.
 - The algorithm-efficiency plot uses an additional timing file for running Dijkstra on the unweighted dataset. Update the path in make_plots.py if that file is stored elsewhere.
+0-unweighted
+1-weighted
 
 ## Clean
 
