@@ -1,5 +1,8 @@
 # Closeness Centrality (C++ OpenMP)
 
+NOTE : WE HAVE REMOVED SOME OF THE LARGE DATASETS AS THEY WERE BEEN TOO MUCH MEMORY TAKING AND WERE NOT BEEN ABLE TO BE PUSHED ON GITHUB AND MOODLE
+GOOGLE DRIVE DATASET LINK - https://drive.google.com/drive/folders/1Qdc-3Y4ITboTQsiGg2yR53ODQ8ur---C?usp=sharing
+
 ## Overview
 This project computes closeness centrality for unweighted and weighted graphs using a parallel C++ (OpenMP) implementation. It also includes Python/NetworkX baselines and plotting scripts for performance analysis.
 
