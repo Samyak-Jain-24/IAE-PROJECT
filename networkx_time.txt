@@ -1,0 +1,2 @@
+Computation took: 48.035062 seconds.
+Node (60) score: 0.2815658748977894
