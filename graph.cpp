@@ -12,11 +12,11 @@ void Graph::addEdge(int u, int v, int w) {
     adj[u].push_back({v, w});
 }
 
-double Graph::getShortestPathSum(int startNode) {
+double Graph::getShortestPathSum(int startNode, int& reachableNodes) {
     std::vector<int> dist(V, INF);
     dist[startNode] = 0;
     long long totalDist = 0;
-    int reachableNodes = 0;
+    reachableNodes = 0;
 
     if (!isWeighted) {
         // Unweighted: Use BFS
