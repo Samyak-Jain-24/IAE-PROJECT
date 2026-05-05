@@ -1,0 +1,15 @@
+1 Thread:
+Computation took: 1.57398 seconds.
+Top node (0) score: 1.25926
+
+2 Threads:
+Computation took: 0.821632 seconds.
+Top node (0) score: 1.25926
+
+4 Threads:
+Computation took: 0.427154 seconds.
+Top node (0) score: 1.25926
+
+8 Threads:
+Computation took: 0.272304 seconds.
+Top node (0) score: 1.25926
