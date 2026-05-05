@@ -67,13 +67,13 @@ Unweighted or weighted (single script):
 
 ```bash
 python3 compare.py data/wiki-Vote.txt/Wiki-Vote.txt 0
-python3 compare.py data/wiki-Vote-weighted.txt 1
+python3 compare_weighted.py data/wiki-Vote-weighted.txt 1
 ```
 
 Weighted-only script:
 
 ```bash
-python3 compare_weighted.py data/wiki-Vote-weighted.txt 0
+python3 compare_weighted.py data/wiki-Vote-weighted.txt 1
 ```
 
 ## Generate Plots
